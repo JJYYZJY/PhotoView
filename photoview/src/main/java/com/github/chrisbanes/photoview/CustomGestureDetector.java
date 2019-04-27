@@ -42,34 +42,34 @@ class CustomGestureDetector {
 
     CustomGestureDetector(Context context, OnGestureListener listener) {
         final ViewConfiguration configuration = ViewConfiguration
-                .get(context);
-        mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
-        mTouchSlop = configuration.getScaledTouchSlop();
+                .get(context);//获取配置文件
+        mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();//获取产生惯性滑动的最小速度
+        mTouchSlop = configuration.getScaledTouchSlop();//触摸移动多少像素之内不算滑动
 
-        mListener = listener;
-        ScaleGestureDetector.OnScaleGestureListener mScaleListener = new ScaleGestureDetector.OnScaleGestureListener() {
+        mListener = listener;//监听
+        ScaleGestureDetector.OnScaleGestureListener mScaleListener = new ScaleGestureDetector.OnScaleGestureListener() {//缩放探测器
 
             @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                float scaleFactor = detector.getScaleFactor();
+            public boolean onScale(ScaleGestureDetector detector) {//缩放
+                float scaleFactor = detector.getScaleFactor();//获取缩放比例因子
 
-                if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor))
+                if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor))//无效值或无限大
                     return false;
              
                 if (scaleFactor >= 0) {
                     mListener.onScale(scaleFactor,
-                            detector.getFocusX(), detector.getFocusY());
+                            detector.getFocusX(), detector.getFocusY());//通知开始缩放
                 }
                 return true;
             }
 
             @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
+            public boolean onScaleBegin(ScaleGestureDetector detector) {//缩放开始
                 return true;
             }
 
             @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
+            public void onScaleEnd(ScaleGestureDetector detector) {//缩放借宿
                 // NO-OP
             }
         };
@@ -110,7 +110,7 @@ class CustomGestureDetector {
         }
     }
 
-    private boolean processTouchEvent(MotionEvent ev) {
+    private boolean processTouchEvent(MotionEvent ev) {//处理拖拽事件
         final int action = ev.getAction();
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
@@ -137,7 +137,7 @@ class CustomGestureDetector {
                 }
 
                 if (mIsDragging) {
-                    mListener.onDrag(dx, dy);
+                    mListener.onDrag(dx, dy);//通知拖拽
                     mLastTouchX = x;
                     mLastTouchY = y;
 
